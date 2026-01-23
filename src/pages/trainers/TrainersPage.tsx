@@ -1,7 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Edit, Eye, Plus, Search, Send as Suspend, UserCheck, UserX } from 'lucide-react';
 import React, { useState } from 'react';
-import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import DataTable from '../../components/tables/DataTable';
 import Badge from '../../components/ui/Badge';
@@ -10,9 +8,9 @@ import Card from '../../components/ui/Card';
 import Modal from '../../components/ui/Modal';
 import Pagination from '../../components/ui/Pagination';
 import { usePagination } from '../../hooks/usePagination';
-import api from '../../services/api';
-import { PaginatedResponse, Trainer } from '../../types';
-import { QUERY_KEYS, TRAINER_STATUSES } from '../../utils/constants';
+import { useTrainers, useUpdateTrainer } from '../../services/trainersService';
+import { Trainer } from '../../types';
+import { TRAINER_STATUSES } from '../../utils/constants';
 import { debounce, formatDate, getStatusColor } from '../../utils/helpers';
 
 const TrainersPage: React.FC = () => {
@@ -25,36 +23,15 @@ const TrainersPage: React.FC = () => {
     }>({ open: false });
 
     const pagination = usePagination();
-    const queryClient = useQueryClient();
 
-    const { data, isLoading } = useQuery({
-        queryKey: [QUERY_KEYS.TRAINERS, { page: pagination.page, limit: pagination.limit, search, status }],
-        queryFn: async () => {
-            const params = new URLSearchParams({
-                page: pagination.page.toString(),
-                limit: pagination.limit.toString(),
-                ...(search && { search }),
-                ...(status && { status }),
-            });
-            const response = await api.get(`/trainers?${params.toString()}`);
-            return response.data.data as PaginatedResponse<Trainer>;
-        },
+    const { data, isLoading } = useTrainers({
+        page: pagination.page,
+        limit: pagination.limit,
+        search,
+        status,
     });
 
-    const updateTrainerMutation = useMutation({
-        mutationFn: async ({ id, status }: { id: string; status: string }) => {
-            const response = await api.put(`/trainers/${id}`, { status });
-            return response.data;
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.TRAINERS] });
-            toast.success('Trainer status updated successfully!');
-            setActionModal({ open: false });
-        },
-        onError: (error: any) => {
-            toast.error(error.response?.data?.message || 'Failed to update trainer');
-        },
-    });
+    const updateTrainerMutation = useUpdateTrainer();
 
     const handleSearch = debounce((value: string) => {
         setSearch(value);
@@ -73,10 +50,15 @@ const TrainersPage: React.FC = () => {
                 suspend: 'suspended',
             };
 
-            updateTrainerMutation.mutate({
-                id: actionModal.trainer.id,
-                status: statusMap[actionModal.action],
-            });
+            updateTrainerMutation.mutate(
+                {
+                    id: actionModal.trainer.id,
+                    status: statusMap[actionModal.action],
+                },
+                {
+                    onSuccess: () => setActionModal({ open: false }),
+                }
+            );
         }
     };
 
