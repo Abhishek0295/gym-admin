@@ -54,7 +54,7 @@ const PublicHeader: React.FC = () => {
                                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
                                         <User className="h-4 w-4 text-blue-600" />
                                     </div>
-                                    <span className="text-sm font-medium text-gray-700 hidden lg:block">{user?.username}</span>
+                                    <span className="text-sm font-medium text-gray-700 hidden lg:block">{user?.name}</span>
                                 </div>
                                 <Button variant="outline" size="sm" onClick={logout}>
                                     Logout
@@ -114,7 +114,7 @@ const PublicHeader: React.FC = () => {
                                         </div>
                                     </div>
                                     <div>
-                                        <div className="text-base font-medium leading-none text-gray-800">{user?.username}</div>
+                                        <div className="text-base font-medium leading-none text-gray-800">{user?.name}</div>
                                         <div className="text-sm font-medium leading-none text-gray-500">{user?.email}</div>
                                     </div>
                                 </div>

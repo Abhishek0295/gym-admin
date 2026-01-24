@@ -3,12 +3,17 @@ import { fetchCategories, toggleCategoryStatus, deleteCategory } from '../../ser
 import { QUERY_KEYS } from '../../utils/constants';
 import toast from 'react-hot-toast';
 
+interface CategoryQueryParams {
+    page?: number;
+    limit?: number;
+    search?: string;
+}
+
 // Fetch Categories
-export const useCategories = (page: number, limit: number, search: string) => {
+export const useCategories = (params: CategoryQueryParams = {}) => {
     return useQuery({
-        queryKey: [QUERY_KEYS.CATEGORIES, { page, limit, search }],
-        queryFn: () => fetchCategories(page, limit, search),
-        // keepPreviousData: true,
+        queryKey: [QUERY_KEYS.CATEGORIES, params],
+        queryFn: () => fetchCategories(params.page || 1, params.limit || 10, params.search || ''),
     });
 };
 

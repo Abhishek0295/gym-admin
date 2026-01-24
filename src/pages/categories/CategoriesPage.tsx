@@ -7,7 +7,7 @@ import Pagination from '../../components/ui/Pagination';
 import { useDebouncedValue } from '../../hooks/useDebouncedValue';
 import { usePagination } from '../../hooks/usePagination';
 import { Category } from '../../types';
-import { useDeleteCategory, useToggleCategory } from '../categories/useCategories';
+import { useDeleteCategory, useToggleCategory, useCategories } from './useCategories';
 import CategoriesTable from './CategoriesTable';
 
 const CategoriesPage: React.FC = () => {
@@ -16,22 +16,11 @@ const CategoriesPage: React.FC = () => {
     const pagination = usePagination();
     const [deleteModal, setDeleteModal] = useState<{ open: boolean; category?: Category }>({ open: false });
 
-    // const { data, isLoading } = useCategories(pagination.page, pagination.limit, debouncedSearch);
-    const isLoading = false;
-    const data = {
-        data: [
-            {
-                name: 'name',
-                isActive: false,
-                isTopGenre: false,
-                id: '1',
-                createdAt: '2023-02-05T11:45:00Z',
-                description: 'description',
-            },
-        ],
-        totalPages: 10,
-        total: 100,
-    };
+    const { data, isLoading } = useCategories({
+        page: pagination.page,
+        limit: pagination.limit,
+        search: debouncedSearch,
+    });
     const toggleMutation = useToggleCategory();
     const deleteMutation = useDeleteCategory();
 

@@ -9,7 +9,7 @@ import { useAuthActions } from '../../hooks/useAuthActions';
 import { useAuth } from '../../store/authContext';
 
 const signupSchema = yup.object({
-    username: yup.string().required('Username is required'),
+    name: yup.string().required('Name is required'),
     email: yup.string().email('Invalid email').required('Email is required'),
     password: yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
     confirmPassword: yup
@@ -46,10 +46,10 @@ const SignupPage: React.FC = () => {
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <FormField
-                        label="Username"
-                        registration={register('username')}
-                        error={errors.username?.message as string}
-                        placeholder="johndoe"
+                        label="Name"
+                        registration={register('name')}
+                        error={errors.name?.message as string}
+                        placeholder="John Doe"
                         required
                     />
 

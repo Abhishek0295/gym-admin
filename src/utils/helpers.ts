@@ -36,16 +36,20 @@ export function generateId(): string {
   return Math.random().toString(36).substr(2, 9);
 }
 
-export function debounce<T extends (...args: any[]) => any>(
-  func: T,
-  wait: number
-): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout;
+export function debounce<T extends (...args: any[]) => void>(
+  fn: T,
+  delay = 300
+) {
+  let timer: ReturnType<typeof setTimeout>;
+
   return (...args: Parameters<T>) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func(...args), wait);
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn(...args);
+    }, delay);
   };
 }
+
 
 export function getStatusColor(status: string): string {
   const colors: Record<string, string> = {

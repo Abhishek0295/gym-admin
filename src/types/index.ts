@@ -1,6 +1,6 @@
 export interface User {
     id: string;
-    username: string;
+    name: string;
     email: string;
     role: string;
     createdAt: string;
@@ -9,13 +9,12 @@ export interface User {
 
 export interface Product {
     id: string;
-    title: string;
-    brand: string;
-    category: string;
-    status: 'published' | 'draft' | 'pending';
-    image: string;
+    name: string;
     description: string;
     price: number;
+    category: any; // Can be ID or populated object
+    status: "published" | "draft" | "pending";
+    image: string;
     createdAt: string;
     updatedAt: string;
 }
@@ -24,7 +23,7 @@ export interface Trainer {
     id: string;
     name: string;
     email: string;
-    status: 'pending' | 'approved' | 'rejected' | 'suspended';
+    status: "pending" | "approved" | "rejected" | "suspended";
     specialization: string;
     experience: string;
     joinedAt: string;
@@ -44,9 +43,9 @@ export interface Transaction {
     id: string;
     userId: string;
     userName: string;
-    type: 'pay-in' | 'payout';
+    type: "pay-in" | "payout";
     amount: number;
-    status: 'completed' | 'pending' | 'failed';
+    status: "completed" | "pending" | "failed";
     description: string;
     createdAt: string;
 }
@@ -78,11 +77,11 @@ export interface CMSPage {
 
 export interface Notification {
     id: string;
-    type: 'registration' | 'publication' | 'payment' | 'riftshards' | 'report';
+    type: "registration" | "publication" | "payment" | "riftshards" | "report";
     title: string;
     message: string;
     recipients: string[];
-    status: 'sent' | 'pending' | 'failed';
+    status: "sent" | "pending" | "failed";
     createdAt: string;
 }
 
@@ -118,7 +117,7 @@ export interface ApiResponse<T> {
 }
 
 export interface LoginCredentials {
-    username: string;
+    email: string;
     password: string;
 }
 

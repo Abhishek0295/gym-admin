@@ -2,12 +2,11 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider } from 'react-router-dom';
 import ToasterProvider from './components/ToasterProvider';
 import { router } from './routes';
-import { setupMockApi } from './services/mockApi';
 import { queryClient } from './store/queryClient';
 
 import { AuthProvider } from './store/authContext';
 
-setupMockApi();
+// setupMockApi();
 
 export default function App() {
     return (

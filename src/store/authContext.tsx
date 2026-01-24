@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { User } from '../types';
 
 interface AuthContextType {
@@ -12,22 +12,18 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [user, setUser] = useState<User | null>(null);
-    const [token, setToken] = useState<string | null>(null);
-
-    useEffect(() => {
-        const savedToken = localStorage.getItem('token');
+    const [user, setUser] = useState<User | null>(() => {
         const savedUser = localStorage.getItem('user');
-        if (savedToken && savedUser) {
+        if (savedUser) {
             try {
-                setToken(savedToken);
-                setUser(JSON.parse(savedUser));
+                return JSON.parse(savedUser);
             } catch {
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
+                return null;
             }
         }
-    }, []);
+        return null;
+    });
+    const [token, setToken] = useState<string | null>(() => localStorage.getItem('token'));
 
     const login = (newUser: User, newToken: string) => {
         localStorage.setItem('token', newToken);
@@ -41,7 +37,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         localStorage.removeItem('user');
         setToken(null);
         setUser(null);
-        window.location.href = '/login';
+        window.location.href = '/';
     };
 
     return <AuthContext.Provider value={{ user, token, isAuthenticated: !!token, login, logout }}>{children}</AuthContext.Provider>;

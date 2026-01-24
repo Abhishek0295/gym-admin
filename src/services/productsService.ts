@@ -13,7 +13,7 @@ interface ProductQueryParams {
 }
 
 export const useProducts = (params: ProductQueryParams = {}) => {
-    return useQuery({
+    return useQuery<PaginatedResponse<Product>>({
         queryKey: [QUERY_KEYS.PRODUCTS, params],
         queryFn: async () => {
             const searchParams = new URLSearchParams();
@@ -26,6 +26,8 @@ export const useProducts = (params: ProductQueryParams = {}) => {
             const response = await api.get(`/products?${searchParams.toString()}`);
             return response.data.data as PaginatedResponse<Product>;
         },
+        staleTime: 30 * 1000,
+        placeholderData: (previousData) => previousData,
     });
 };
 
