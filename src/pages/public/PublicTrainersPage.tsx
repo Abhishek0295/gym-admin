@@ -128,16 +128,4 @@ const PublicTrainersPage: React.FC = () => {
     );
 };
 
-// Helper component
-const Badge: React.FC<{ children: React.ReactNode; className?: string }> = ({
-    children,
-    className,
-}) => (
-    <span
-        className={`px-2 py-1 rounded text-[10px] font-bold text-white uppercase tracking-wider ${className}`}
-    >
-        {children}
-    </span>
-);
-
 export default PublicTrainersPage;

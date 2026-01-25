@@ -1,4 +1,5 @@
-export const API_BASE_URL = "http://localhost:3000/api";
+export const API_BASE_URL = "http://localhost:4000/api";
+// || import.meta.env.VITE_API_BASE_URL;
 
 export const ROUTES = {
     LOGIN: "/login",
@@ -15,6 +16,7 @@ export const ROUTES = {
     CMS: "/cms",
     NOTIFICATIONS: "/notifications",
     SETTINGS: "/settings",
+    CONTACTS: "/contacts",
 } as const;
 
 export const QUERY_KEYS = {
@@ -29,6 +31,8 @@ export const QUERY_KEYS = {
     COMMISSIONS: "commissions",
     CMS_PAGES: "cms-pages",
     NOTIFICATIONS: "notifications",
+    CONTACTS: "contacts",
+    CONTACT_STATS: "contact-stats",
     USER_PROFILE: "user-profile",
 } as const;
 

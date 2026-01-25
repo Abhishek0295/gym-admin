@@ -130,3 +130,13 @@ export interface AuthState {
     token: string | null;
     isAuthenticated: boolean;
 }
+
+export interface Contact {
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+    message: string;
+    isRead: boolean;
+    createdAt: string;
+}

@@ -2,8 +2,38 @@ import { Mail, MapPin, Phone, Send } from "lucide-react";
 import React from "react";
 import Button from "../../components/ui/Button";
 import Card from "../../components/ui/Card";
+import { useState } from "react";
+import { useCreateContact } from "../contacts/useContacts";
+import toast from "react-hot-toast";
 
 const ContactPage: React.FC = () => {
+    const createMutation = useCreateContact();
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+    });
+
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        createMutation.mutate(formData, {
+            onSuccess: () => {
+                toast.success("Message sent successfully!");
+                setFormData({ name: "", email: "", phone: "", message: "" });
+            },
+            onError: () => {
+                toast.error("Failed to send message. Please try again.");
+            },
+        });
+    };
+
     return (
         <div className="bg-white min-h-screen overflow-x-hidden">
             {/* ---------------- Creative Hero & Form Section ---------------- */}
@@ -87,7 +117,10 @@ const ContactPage: React.FC = () => {
                                         <div className="h-2 w-12 bg-blue-600 rounded-full"></div>
                                     </div>
 
-                                    <form className="space-y-6">
+                                    <form
+                                        className="space-y-6"
+                                        onSubmit={handleSubmit}
+                                    >
                                         <div className="grid md:grid-cols-2 gap-6">
                                             <div className="space-y-2">
                                                 <label className="text-[10px] font-black uppercase text-gray-400 tracking-[0.2em] ml-1">
@@ -95,7 +128,11 @@ const ContactPage: React.FC = () => {
                                                 </label>
                                                 <input
                                                     type="text"
+                                                    name="name"
+                                                    value={formData.name}
+                                                    onChange={handleChange}
                                                     placeholder="e.g. Spartan"
+                                                    required
                                                     className="w-full bg-gray-100/50 border-0 rounded-2xl px-5 py-4 focus:ring-4 focus:ring-blue-600/10 transition-all text-sm font-medium"
                                                 />
                                             </div>
@@ -105,7 +142,11 @@ const ContactPage: React.FC = () => {
                                                 </label>
                                                 <input
                                                     type="email"
+                                                    name="email"
+                                                    value={formData.email}
+                                                    onChange={handleChange}
                                                     placeholder="warrior@gym.com"
+                                                    required
                                                     className="w-full bg-gray-100/50 border-0 rounded-2xl px-5 py-4 focus:ring-4 focus:ring-blue-600/10 transition-all text-sm font-medium"
                                                 />
                                             </div>
@@ -117,6 +158,9 @@ const ContactPage: React.FC = () => {
                                             </label>
                                             <input
                                                 type="tel"
+                                                name="phone"
+                                                value={formData.phone}
+                                                onChange={handleChange}
                                                 placeholder="+1 (000) 000-0000"
                                                 className="w-full bg-gray-100/50 border-0 rounded-2xl px-5 py-4 focus:ring-4 focus:ring-blue-600/10 transition-all text-sm font-medium"
                                             />
@@ -128,13 +172,24 @@ const ContactPage: React.FC = () => {
                                             </label>
                                             <textarea
                                                 rows={5}
+                                                name="message"
+                                                value={formData.message}
+                                                onChange={handleChange}
                                                 placeholder="What are your fitness goals?"
+                                                required
                                                 className="w-full bg-gray-100/50 border-0 rounded-2xl px-5 py-4 focus:ring-4 focus:ring-blue-600/10 transition-all text-sm font-medium resize-none shadow-inner"
                                             ></textarea>
                                         </div>
 
-                                        <Button className="w-full py-5 rounded-2xl text-lg font-black uppercase tracking-[0.2em] shadow-xl shadow-blue-600/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3">
-                                            Execute <Send className="h-5 w-5" />
+                                        <Button
+                                            type="submit"
+                                            disabled={createMutation.isPending}
+                                            className="w-full py-5 rounded-2xl text-lg font-black uppercase tracking-[0.2em] shadow-xl shadow-blue-600/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3"
+                                        >
+                                            {createMutation.isPending
+                                                ? "Sending..."
+                                                : "Execute"}{" "}
+                                            <Send className="h-5 w-5" />
                                         </Button>
                                     </form>
                                 </Card>

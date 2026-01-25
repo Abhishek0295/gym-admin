@@ -210,21 +210,26 @@ const LandingPage: React.FC = () => {
                                       key={product.id}
                                       className="group relative flex flex-col bg-white rounded-[2.5rem] border border-gray-100 hover:border-blue-200 transition-all duration-500 hover:shadow-[0_40px_80px_-20px_rgba(37,99,235,0.15)] overflow-hidden"
                                   >
-                                      {/* Refined Standardized Framing */}
-                                      <div className="relative aspect-square p-10">
-                                          <div className="relative h-full w-full rounded-[2.5rem] overflow-hidden bg-gray-50 flex items-center justify-center transition-transform duration-700 group-hover:scale-[0.98]">
+                                      {/* Image Frame with Asymmetry */}
+                                      <div className="relative aspect-[4/5] p-4">
+                                          <div className="relative h-full w-full rounded-[2rem] overflow-hidden bg-gray-50 flex items-center justify-center transition-transform duration-700 group-hover:scale-[0.98]">
                                               <img
                                                   src={product.image}
                                                   alt={product.name}
-                                                  className="h-full w-full object-contain p-4 transition-transform duration-1000 group-hover:scale-110"
+                                                  className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110"
                                               />
 
-                                              {/* Best Seller Badge */}
-                                              <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/20">
-                                                  <span className="text-[10px] font-black uppercase tracking-widest text-blue-600">
-                                                      Best Seller
-                                                  </span>
-                                              </div>
+                                              {/* Glassmorphic Category Badge */}
+                                              {product.category && (
+                                                  <div className="absolute top-4 left-4 px-4 py-2 bg-white/20 backdrop-blur-md border border-white/20 rounded-2xl">
+                                                      <span className="text-[10px] font-black uppercase tracking-widest text-white drop-shadow-sm">
+                                                          {
+                                                              product.category
+                                                                  .name
+                                                          }
+                                                      </span>
+                                                  </div>
+                                              )}
 
                                               {/* Price Tag Overlay */}
                                               <div className="absolute bottom-4 right-4 bg-gray-900 px-4 py-2 rounded-2xl shadow-xl transition-all duration-500 group-hover:bg-blue-600 group-hover:-translate-y-2">
@@ -237,20 +242,12 @@ const LandingPage: React.FC = () => {
 
                                       {/* Content */}
                                       <div className="flex flex-col flex-grow px-8 pb-8 pt-2">
-                                          <h3 className="text-xl font-black uppercase tracking-tight text-gray-900 mb-2 leading-tight group-hover:text-blue-600 transition-colors line-clamp-1">
+                                          <h3 className="text-xl font-black uppercase tracking-tight text-gray-900 mb-2 leading-tight group-hover:text-blue-600 transition-colors">
                                               {product.name}
                                           </h3>
-                                          <div className="flex items-center space-x-1 mb-6">
-                                              {[1, 2, 3, 4, 5].map((s) => (
-                                                  <Star
-                                                      key={s}
-                                                      className="h-3 w-3 fill-yellow-400 text-yellow-400"
-                                                  />
-                                              ))}
-                                              <span className="text-[10px] font-bold text-gray-400 mt-0.5 ml-2">
-                                                  (44)
-                                              </span>
-                                          </div>
+                                          <p className="text-sm text-gray-500 font-medium line-clamp-2 mb-6 leading-relaxed">
+                                              {product.description}
+                                          </p>
 
                                           <div className="mt-auto">
                                               <Button
@@ -260,7 +257,7 @@ const LandingPage: React.FC = () => {
                                                   className="w-full py-4 rounded-2xl text-sm font-black uppercase tracking-widest shadow-xl shadow-blue-500/10 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3"
                                               >
                                                   <ShoppingBag className="h-4 w-4" />
-                                                  Add
+                                                  Add to Gear
                                               </Button>
                                           </div>
                                       </div>
