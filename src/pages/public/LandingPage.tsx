@@ -1,11 +1,4 @@
-import {
-    ArrowRight,
-    Shield,
-    ShoppingBag,
-    Star,
-    Users,
-    Zap,
-} from "lucide-react";
+import { ArrowRight, Shield, ShoppingBag, Users, Zap } from "lucide-react";
 import React from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import Button from "../../components/ui/Button";
