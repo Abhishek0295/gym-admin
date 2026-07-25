@@ -4,24 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { ROUTES } from '../../utils/constants';
 
 const Breadcrumbs: React.FC = () => {
-    const location = useLocation();
-    const pathnames = location.pathname.split('/').filter((x) => x);
-
-    const breadcrumbNameMap: Record<string, string> = {
-        dashboard: 'Dashboard',
-        products: 'Products',
-        trainers: 'Trainers',
-        categories: 'Categories',
-        transactions: 'Transactions',
-        currency: 'Currency & Plans',
-        cms: 'CMS',
-        notifications: 'Notifications',
-        settings: 'Settings',
-        requests: 'Requests',
-        edit: 'Edit',
-    };
-
-    if (pathnames.length === 0) return null;
+    return null;
 
     return (
         <nav className="flex" aria-label="Breadcrumb">
