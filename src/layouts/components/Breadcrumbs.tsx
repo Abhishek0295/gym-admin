@@ -3,8 +3,25 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ROUTES } from '../../utils/constants';
 
+const breadcrumbNameMap: Record<string, string> = {
+    dashboard: 'Dashboard',
+    products: 'Products',
+    trainers: 'Trainers',
+    requests: 'Requests',
+    users: 'Users',
+    categories: 'Categories',
+    transactions: 'Transactions',
+    currency: 'Currency',
+    cms: 'CMS',
+    notifications: 'Notifications',
+    settings: 'Settings',
+    contacts: 'Contacts',
+    edit: 'Edit',
+};
+
 const Breadcrumbs: React.FC = () => {
-    return null;
+    const location = useLocation();
+    const pathnames = location.pathname.split('/').filter((x) => x);
 
     return (
         <nav className="flex" aria-label="Breadcrumb">
@@ -18,7 +35,7 @@ const Breadcrumbs: React.FC = () => {
                 {pathnames.map((value, index) => {
                     const to = `/${pathnames.slice(0, index + 1).join('/')}`;
                     const isLast = index === pathnames.length - 1;
-                    const name = breadcrumbNameMap[value] || value;
+                    const name = breadcrumbNameMap[value] || (value.charAt(0).toUpperCase() + value.slice(1));
 
                     return (
                         <li key={to} className="flex items-center">
