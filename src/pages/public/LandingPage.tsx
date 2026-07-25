@@ -278,9 +278,9 @@ const LandingPage: React.FC = () => {
                         </h2>
                         <p className="text-xl md:text-2xl text-gray-400 mb-12 font-medium max-w-2xl mx-auto leading-relaxed">
                             Join over 5,000+ warriors who have achieved their
-                            peak performance with GymAdmin.
+                            peak performance with One & Only Fitness.
                         </p>
-                        <Link to="/signup">
+                        <Link to="/contact">
                             <Button
                                 size="lg"
                                 className="px-16 py-6 text-xl font-black uppercase tracking-[0.2em] rounded-[2rem] shadow-2xl shadow-blue-500/20 hover:scale-[1.05] transition-all"

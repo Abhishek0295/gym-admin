@@ -36,7 +36,7 @@ const AboutPage: React.FC = () => {
                             <span className="text-blue-600">Hustle</span>.
                         </h1>
                         <p className="text-gray-400 text-lg md:text-xl max-w-xl font-medium leading-relaxed">
-                            Founded on the principle of raw potential, GymAdmin
+                            Founded on the principle of raw potential, One & Only Fitness
                             is more than a platform. It's the digital backbone
                             for champions and the ultimate arsenal for those who
                             refuse to settle.
@@ -85,7 +85,7 @@ const AboutPage: React.FC = () => {
                             </h2>
                             <p className="text-lg text-gray-500 font-medium leading-relaxed">
                                 Founded in the heart of the fitness revolution,
-                                GymAdmin was built to bridge the gap between
+                                One & Only Fitness was built to bridge the gap between
                                 human spirit and digital efficiency. We believe
                                 technology should be a force multiplier for your
                                 health, not a hurdle.

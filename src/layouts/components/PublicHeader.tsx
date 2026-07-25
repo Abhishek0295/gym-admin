@@ -26,7 +26,7 @@ const PublicHeader: React.FC = () => {
                     {/* Logo */}
                     <Link to="/" className="flex items-center space-x-2" onClick={closeMenu}>
                         <Dumbbell className="h-8 w-8 text-blue-600" />
-                        <span className="text-xl font-bold text-gray-900 italic">GymAdmin</span>
+                        <span className="text-xl font-bold text-gray-900 tracking-tight">One & Only Fitness</span>
                     </Link>
 
                     {/* Desktop Navigation */}
