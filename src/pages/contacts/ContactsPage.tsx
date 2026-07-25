@@ -8,6 +8,7 @@ import { usePagination } from "../../hooks/usePagination";
 import { useContacts, useMarkAsRead } from "./useContacts";
 import { cn } from "../../utils/helpers";
 import toast from "react-hot-toast";
+import LoadingSpinner from "../../components/ui/LoadingSpinner";
 
 const ContactsPage: React.FC = () => {
     const [search, setSearch] = useState("");
@@ -92,7 +93,7 @@ const ContactsPage: React.FC = () => {
                                         colSpan={5}
                                         className="px-6 py-4 text-center text-sm text-gray-500"
                                     >
-                                        Loading...
+                                        <LoadingSpinner />
                                     </td>
                                 </tr>
                             ) : data?.data.length === 0 ? (

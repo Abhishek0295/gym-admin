@@ -1,12 +1,11 @@
 import { Dialog, Transition } from "@headlessui/react";
 import {
-    Bell,
     CreditCard,
-    DollarSign,
     Dumbbell,
     FileText,
     FolderOpen,
     LayoutDashboard,
+    MessageSquare,
     Package,
     Settings,
     Users,
@@ -24,14 +23,12 @@ interface SidebarProps {
 
 const navigation = [
     { name: "Dashboard", href: ROUTES.DASHBOARD, icon: LayoutDashboard },
+    { name: "Members", href: ROUTES.USERS, icon: Users },
+    { name: "Trainers", href: ROUTES.TRAINERS, icon: Dumbbell },
     { name: "Products", href: ROUTES.PRODUCTS, icon: Package },
-    { name: "Trainers", href: ROUTES.TRAINERS, icon: Users },
     { name: "Categories", href: ROUTES.CATEGORIES, icon: FolderOpen },
     { name: "Transactions", href: ROUTES.TRANSACTIONS, icon: CreditCard },
-    { name: "Currency & Plans", href: ROUTES.CURRENCY, icon: DollarSign },
-    { name: "CMS", href: ROUTES.CMS, icon: FileText },
-    { name: "Notifications", href: ROUTES.NOTIFICATIONS, icon: Bell },
-    { name: "Contacts", href: ROUTES.CONTACTS, icon: FileText },
+    { name: "Contacts", href: ROUTES.CONTACTS, icon: MessageSquare },
     { name: "Settings", href: ROUTES.SETTINGS, icon: Settings },
 ];
 

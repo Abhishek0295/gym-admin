@@ -1,5 +1,4 @@
-export const API_BASE_URL = "http://localhost:4000/api";
-// || import.meta.env.VITE_API_BASE_URL;
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:4000/api";
 
 export const ROUTES = {
     LOGIN: "/login",
@@ -10,6 +9,7 @@ export const ROUTES = {
     PRODUCT_EDIT: "/products/:id/edit",
     TRAINERS: "/trainers",
     TRAINER_REQUESTS: "/trainers/requests",
+    USERS: "/users",
     CATEGORIES: "/categories",
     TRANSACTIONS: "/transactions",
     CURRENCY: "/currency",
@@ -25,6 +25,8 @@ export const QUERY_KEYS = {
     PRODUCT_DETAIL: "product-detail",
     TRAINERS: "trainers",
     TRAINER_REQUESTS: "trainer-requests",
+    USERS: "users",
+    SETTINGS: "settings",
     CATEGORIES: "categories",
     TRANSACTIONS: "transactions",
     PLANS: "plans",

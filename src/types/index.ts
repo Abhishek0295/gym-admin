@@ -1,11 +1,22 @@
 export interface User {
     id: string;
     name: string;
-    email: string;
+    email?: string;
     role: string;
+    phone?: string;
+    address?: string;
+    membershipCode?: string;
+    membershipStatus?: "active" | "expired" | "inactive";
+    feesPaid?: boolean;
+    subscriptionExpiresAt?: string;
+    membershipStartDate?: string;
+    paymentDate?: string;
+    paymentAmount?: number;
+    profileImage?: string;
     createdAt: string;
     updatedAt: string;
 }
+
 
 export interface Product {
     id: string;
@@ -43,10 +54,17 @@ export interface Transaction {
     id: string;
     userId: string;
     userName: string;
-    type: "pay-in" | "payout";
+    userCode?: string;
+    type?: "pay-in" | "payout";
     amount: number;
+    paymentDate?: string;
+    startDate?: string;
+    endDate?: string;
+    durationMonths?: number;
+    paymentMethod?: string;
     status: "completed" | "pending" | "failed";
-    description: string;
+    description?: string;
+    notes?: string;
     createdAt: string;
 }
 
@@ -87,6 +105,8 @@ export interface Notification {
 
 export interface DashboardStats {
     totalUsers: number;
+    activeUsers: number;
+    pendingFeesCount: number;
     totalTrainers: number;
     totalProducts: number;
     monthlyGrowth: {
@@ -95,6 +115,17 @@ export interface DashboardStats {
         products: number;
     };
 }
+
+export interface GymSetting {
+    id: string;
+    gymName: string;
+    gymPhone: string;
+    gymEmail: string;
+    whatsappTemplate: string;
+    smsTemplate: string;
+    updatedAt: string;
+}
+
 
 export interface ChartData {
     name: string;

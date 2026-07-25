@@ -61,8 +61,8 @@ export const useUpdateTrainer = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async ({ id, status }: { id: string; status: string }) => {
-            const response = await api.put(`/trainers/${id}`, { status });
+        mutationFn: async ({ id, ...data }: Partial<Trainer> & { id: string }) => {
+            const response = await api.put(`/trainers/${id}`, data);
             return response.data;
         },
         onSuccess: () => {
@@ -71,6 +71,24 @@ export const useUpdateTrainer = () => {
         },
         onError: (error: any) => {
             toast.error(error.response?.data?.message || 'Failed to update trainer');
+        },
+    });
+};
+
+export const useDeleteTrainer = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (id: string) => {
+            const response = await api.delete(`/trainers/${id}`);
+            return response.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.TRAINERS] });
+            toast.success('Trainer deleted successfully!');
+        },
+        onError: (error: any) => {
+            toast.error(error.response?.data?.message || 'Failed to delete trainer');
         },
     });
 };

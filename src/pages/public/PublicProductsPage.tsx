@@ -165,7 +165,7 @@ const PublicProductsPage: React.FC = () => {
                             />
                             {isFetching && (
                                 <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
-                                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-600 border-t-transparent"></div>
+                                    <LoadingSpinner size="sm" />
                                 </div>
                             )}
                         </div>

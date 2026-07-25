@@ -51,7 +51,7 @@ const LandingPage: React.FC = () => {
                     <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-900/40 to-transparent"></div>
                 </div>
 
-                <div className="container mx-auto px-4 relative z-10">
+                <div className="container mx-auto px-4 py-4 relative z-10">
                     <div className="max-w-4xl">
                         <span className="text-blue-500 font-black uppercase tracking-[0.4em] text-sm mb-6 block">
                             The Future of Fitness
@@ -79,7 +79,8 @@ const LandingPage: React.FC = () => {
                                 <Button
                                     variant="outline"
                                     size="lg"
-                                    className="px-10 py-5 text-lg font-black uppercase tracking-widest border-2 border-white/20 text-white hover:bg-white hover:text-black rounded-2xl transition-all"
+                                    className="px-10 py-5 text-lg font-black uppercase tracking-widest border-2 border-white/20 text-white hover:scale-[1.05] hover:shadow-blue-500/20 rounded-2xl transition-all"
+                                    style={{ color: "black" }}
                                 >
                                     Our Story
                                 </Button>

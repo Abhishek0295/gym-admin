@@ -37,7 +37,7 @@ const ContactPage: React.FC = () => {
     return (
         <div className="bg-white min-h-screen overflow-x-hidden">
             {/* ---------------- Creative Hero & Form Section ---------------- */}
-            <div className="relative pt-32 pb-48 md:pb-14">
+            <div className="relative pt-32 pb-32 md:pb-14">
                 {/* Background Text Overlay */}
                 <div className="absolute inset-0 z-0 overflow-hidden select-none pointer-events-none opacity-[0.03] md:opacity-5">
                     <h1 className="text-[30vw] md:text-[20vw] font-black uppercase tracking-tighter leading-none -translate-x-10 translate-y-20 md:translate-y-20">

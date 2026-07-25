@@ -36,6 +36,12 @@ const SettingsPage = Loadable(
 const ContactsPage = Loadable(
     lazy(() => import("../pages/contacts/ContactsPage")),
 );
+const UsersPage = Loadable(
+    lazy(() => import("../pages/users/UsersPage")),
+);
+const UserDetailPage = Loadable(
+    lazy(() => import("../pages/users/UserDetailPage")),
+);
 
 export const protectedRoutes = {
     path: "/",
@@ -54,6 +60,8 @@ export const protectedRoutes = {
             path: "trainers/requests",
             element: <div>Trainer Requests Page</div>,
         },
+        { path: "users", element: <UsersPage /> },
+        { path: "users/:id", element: <UserDetailPage /> },
         { path: "categories", element: <CategoriesPage /> },
         { path: "transactions", element: <TransactionsPage /> },
         { path: "currency", element: <CurrencyPage /> },

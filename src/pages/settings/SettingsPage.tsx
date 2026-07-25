@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Save, Mail, Lock, CreditCard, User } from "lucide-react";
+import { Save, Mail, Lock, CreditCard, User, Dumbbell, Phone } from "lucide-react";
 import { useAuth } from "../../store/authContext";
 import Card from "../../components/ui/Card";
 import Button from "../../components/ui/Button";
 import FormField from "../../components/forms/FormField";
 import toast from "react-hot-toast";
+import { useSettings, useUpdateSettings } from "../../services/settingsService";
+import { WhatsAppPairingCard } from "../../components/whatsapp/WhatsAppPairingCard";
 
 const emailSchema = yup.object({
     currentEmail: yup
@@ -42,9 +44,38 @@ const bankSchema = yup.object({
 
 const SettingsPage: React.FC = () => {
     const { user } = useAuth();
-    const [activeTab, setActiveTab] = useState<"email" | "password" | "bank">(
-        "email",
+    const [activeTab, setActiveTab] = useState<"gym" | "email" | "password" | "bank">(
+        "gym",
     );
+
+    // Gym configuration settings state & endpoints
+    const { data: gymSettings, isLoading: settingsLoading } = useSettings();
+    const updateSettingsMutation = useUpdateSettings();
+
+    const [gymData, setGymData] = useState({
+        gymName: "",
+        gymPhone: "",
+        gymEmail: "",
+        whatsappTemplate: "",
+        smsTemplate: "",
+    });
+
+    React.useEffect(() => {
+        if (gymSettings) {
+            setGymData({
+                gymName: gymSettings.gymName || "",
+                gymPhone: gymSettings.gymPhone || "",
+                gymEmail: gymSettings.gymEmail || "",
+                whatsappTemplate: gymSettings.whatsappTemplate || "",
+                smsTemplate: gymSettings.smsTemplate || "",
+            });
+        }
+    }, [gymSettings]);
+
+    const handleGymSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        updateSettingsMutation.mutate(gymData);
+    };
 
     const emailForm = useForm({
         resolver: yupResolver(emailSchema),
@@ -98,6 +129,7 @@ const SettingsPage: React.FC = () => {
     };
 
     const tabs = [
+        { id: "gym", label: "Gym Config", icon: Dumbbell },
         { id: "email", label: "Email Settings", icon: Mail },
         { id: "password", label: "Password", icon: Lock },
         { id: "bank", label: "Bank Details", icon: CreditCard },
@@ -108,10 +140,10 @@ const SettingsPage: React.FC = () => {
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900">
-                        Account Settings
+                        Settings
                     </h1>
                     <p className="text-gray-600">
-                        Manage your account preferences and security
+                        Manage your gym preferences, contact details and alert templates
                     </p>
                 </div>
             </div>
@@ -159,6 +191,110 @@ const SettingsPage: React.FC = () => {
 
                 <div className="lg:col-span-3">
                     <Card>
+                        {activeTab === "gym" && (
+                            settingsLoading ? (
+                                <div className="flex justify-center items-center py-12">
+                                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                                </div>
+                            ) : (
+                                <form onSubmit={handleGymSubmit} className="space-y-6 text-left">
+                                    <div>
+                                        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                                            Gym Preferences & Details
+                                        </h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">
+                                                    Gym Name
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    required
+                                                    value={gymData.gymName}
+                                                    onChange={(e) => setGymData({ ...gymData, gymName: e.target.value })}
+                                                    className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm h-10 border p-2"
+                                                    placeholder="One and only fitness"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">
+                                                    Gym Phone Number
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    required
+                                                    value={gymData.gymPhone}
+                                                    onChange={(e) => setGymData({ ...gymData, gymPhone: e.target.value })}
+                                                    className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm h-10 border p-2"
+                                                    placeholder="+919876543210"
+                                                />
+                                            </div>
+                                            <div className="md:col-span-2">
+                                                <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">
+                                                    Gym Email Address
+                                                </label>
+                                                <input
+                                                    type="email"
+                                                    required
+                                                    value={gymData.gymEmail}
+                                                    onChange={(e) => setGymData({ ...gymData, gymEmail: e.target.value })}
+                                                    className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm h-10 border p-2"
+                                                    placeholder="info@oneandonlyfitness.com"
+                                                />
+                                            </div>
+                                            <div className="md:col-span-2">
+                                                <div className="flex justify-between items-center mb-1">
+                                                    <label className="block text-xs font-semibold text-gray-500 uppercase">
+                                                        WhatsApp Alert Template
+                                                    </label>
+                                                    <span className="text-[10px] text-gray-400">
+                                                        Tags: {"{name}"}, {"{membershipCode}"}, {"{membershipStatus}"}, {"{expiryDate}"}
+                                                    </span>
+                                                </div>
+                                                <textarea
+                                                    required
+                                                    rows={3}
+                                                    value={gymData.whatsappTemplate}
+                                                    onChange={(e) => setGymData({ ...gymData, whatsappTemplate: e.target.value })}
+                                                    className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm border p-2 bg-white"
+                                                    placeholder="Hello {name}, your gym membership {membershipCode} is expired. Please pay your fees."
+                                                />
+                                            </div>
+                                            <div className="md:col-span-2">
+                                                <div className="flex justify-between items-center mb-1">
+                                                    <label className="block text-xs font-semibold text-gray-500 uppercase">
+                                                        SMS Alert Template
+                                                    </label>
+                                                    <span className="text-[10px] text-gray-400">
+                                                        Tags: {"{name}"}, {"{membershipCode}"}, {"{membershipStatus}"}, {"{expiryDate}"}
+                                                    </span>
+                                                </div>
+                                                <textarea
+                                                    required
+                                                    rows={3}
+                                                    value={gymData.smsTemplate}
+                                                    onChange={(e) => setGymData({ ...gymData, smsTemplate: e.target.value })}
+                                                    className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm border p-2 bg-white"
+                                                    placeholder="Gym Alert: Hello {name}, your membership {membershipCode} status is {membershipStatus}. Please clear your fees."
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="mt-6 mb-6">
+                                            <WhatsAppPairingCard />
+                                        </div>
+                                    </div>
+                                    <Button
+                                        type="submit"
+                                        loading={updateSettingsMutation.isPending}
+                                    >
+                                        <Save className="h-4 w-4 mr-2" />
+                                        Save Gym Config
+                                    </Button>
+                                </form>
+                            )
+                        )}
+
                         {activeTab === "email" && (
                             <form
                                 onSubmit={emailForm.handleSubmit(onSubmitEmail)}

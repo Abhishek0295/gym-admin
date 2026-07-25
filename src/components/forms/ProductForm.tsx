@@ -1,4 +1,3 @@
-import { yupResolver } from "@hookform/resolvers/yup";
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
@@ -7,34 +6,34 @@ import Button from "../ui/Button";
 import { useCreateProduct } from "../../services/productsService";
 import { useCategories } from "../../services/categoriesService";
 
-const productSchema = yup.object({
-    name: yup.string().required("Name is required"),
-    description: yup.string().required("Description is required"),
-    price: yup
-        .number()
-        .positive("Price must be positive")
-        .required("Price is required"),
-    category: yup.string().required("Category is required"),
-    status: yup
-        .string()
-        .oneOf(["published", "draft", "pending"])
-        .required("Status is required"),
-    image: yup.string().url("Must be a valid URL").nullable().optional().typeError("Must be a valid URL").notRequired(),
-});
+/* ===================== SCHEMA ===================== */
 
-interface ProductFormData {
-    name: string;
-    description: string;
-    price: number;
-    category: string;
-    status: "published" | "draft" | "pending";
-    image?: string | null | undefined;
-}
+const productSchema = yup
+    .object({
+        name: yup.string().required("Name is required"),
+        description: yup.string().required("Description is required"),
+        price: yup
+            .number()
+            .typeError("Price must be a number")
+            .positive("Price must be positive")
+            .required("Price is required"),
+        category: yup.string().required("Category is required"),
+        status: yup
+            .mixed<"published" | "draft" | "pending">()
+            .oneOf(["published", "draft", "pending"])
+            .required("Status is required"),
+        image: yup.string().url("Invalid URL").nullable().optional(),
+    })
+    .defined();
+
+type ProductFormData = yup.InferType<typeof productSchema>;
 
 interface ProductFormProps {
     onSuccess?: () => void;
     onCancel?: () => void;
 }
+
+/* ===================== COMPONENT ===================== */
 
 const ProductForm: React.FC<ProductFormProps> = ({ onSuccess, onCancel }) => {
     const { data: categoriesData } = useCategories({ page: 1, limit: 100 });
@@ -46,23 +45,27 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSuccess, onCancel }) => {
         formState: { errors },
         reset,
     } = useForm<ProductFormData>({
-        resolver: yupResolver(productSchema),
+        defaultValues: {
+            status: "draft",
+        },
     });
 
     const onSubmit: SubmitHandler<ProductFormData> = async (data) => {
-        const submitData = {
-            ...data,
-            image: data.image || undefined,
-        };
-        createProductMutation.mutate(submitData, {
-            onSuccess: () => {
-                reset();
-                onSuccess?.();
+        createProductMutation.mutate(
+            {
+                ...data,
+                image: data.image || undefined,
             },
-        });
+            {
+                onSuccess: () => {
+                    reset();
+                    onSuccess?.();
+                },
+            },
+        );
     };
 
-    const categories = categoriesData?.data || [];
+    const categories = categoriesData?.data ?? [];
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -78,8 +81,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSuccess, onCancel }) => {
                 <FormField
                     label="Price"
                     type="number"
-                    step="0.01"
-                    registration={register("price")}
+                    registration={register("price", { valueAsNumber: true })}
                     error={errors.price?.message}
                     placeholder="0.00"
                     required
@@ -98,12 +100,12 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSuccess, onCancel }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium mb-2">
                         Category <span className="text-red-500">*</span>
                     </label>
                     <select
                         {...register("category")}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-2 border rounded-md"
                     >
                         <option value="">Select a category</option>
                         {categories.map((category) => (
@@ -120,12 +122,12 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSuccess, onCancel }) => {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium mb-2">
                         Status <span className="text-red-500">*</span>
                     </label>
                     <select
                         {...register("status")}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-2 border rounded-md"
                     >
                         <option value="draft">Draft</option>
                         <option value="published">Published</option>
