@@ -55,7 +55,7 @@ const Modal: React.FC<ModalProps> = ({
         onClick={onClose}
       />
       <div className={cn(
-        'relative w-full mx-4 bg-white rounded-lg shadow-xl',
+        'relative w-full mx-3 sm:mx-4 max-h-[90vh] overflow-y-auto bg-white rounded-xl shadow-xl',
         sizeClasses[size]
       )}>
         {(title || showCloseButton) && (

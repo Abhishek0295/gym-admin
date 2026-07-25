@@ -88,12 +88,6 @@ const LoginPage: React.FC = () => {
                     </Link>
                 </p>
             </div>
-
-            <div className="mt-4 p-4 bg-gray-50 rounded-md">
-                <p className="text-sm text-gray-600 mb-2">Admin Credentials:</p>
-                <p className="text-xs text-gray-500">Email: admin@gym.com</p>
-                <p className="text-xs text-gray-500">Password: admin123</p>
-            </div>
         </form>
     );
 };

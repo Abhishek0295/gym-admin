@@ -133,43 +133,43 @@ const ProductsPage: React.FC = () => {
 
     return (
         <div className="space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900">
+                    <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
                         Products
                     </h1>
-                    <p className="text-gray-600">
+                    <p className="text-xs sm:text-sm text-gray-600">
                         Manage your gym products catalog
                     </p>
                 </div>
-                <Button onClick={() => setAddModal(true)}>
+                <Button onClick={() => setAddModal(true)} className="w-full sm:w-auto justify-center h-10">
                     <Plus className="h-4 w-4 mr-2" />
                     Add Product
                 </Button>
             </div>
 
             <Card>
-                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
-                    <div className="flex-1 max-w-md">
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-6">
+                    <div className="flex-1 w-full max-w-md">
                         <div className="relative">
                             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                             <input
                                 type="text"
                                 placeholder="Search products..."
-                                className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="pl-10 pr-4 py-2 w-full h-10 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 onChange={(e) => handleSearch(e.target.value)}
                             />
                         </div>
                     </div>
 
-                    <div className="flex space-x-3">
+                    <div className="grid grid-cols-2 sm:flex gap-2">
                         <select
                             value={category}
                             onChange={(e) => {
                                 setCategory(e.target.value);
                                 pagination.resetPagination();
                             }}
-                            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="px-3 py-2 h-10 border border-gray-300 rounded-lg text-xs sm:text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             <option value="">All Categories</option>
                             {categoriesData?.data?.map((cat) => (
@@ -185,7 +185,7 @@ const ProductsPage: React.FC = () => {
                                 setStatus(e.target.value);
                                 pagination.resetPagination();
                             }}
-                            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="px-3 py-2 h-10 border border-gray-300 rounded-lg text-xs sm:text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             <option value="">All Status</option>
                             {PRODUCT_STATUSES.map((status) => (
@@ -197,12 +197,76 @@ const ProductsPage: React.FC = () => {
                     </div>
                 </div>
 
-                <DataTable
-                    columns={columns}
-                    data={data?.data || []}
-                    loading={isLoading}
-                    emptyMessage="No products found"
-                />
+                {/* Mobile View: Product Cards */}
+                <div className="block md:hidden">
+                    {isLoading ? (
+                        <div className="py-12 text-center text-sm text-gray-500">Loading products...</div>
+                    ) : !data?.data || data.data.length === 0 ? (
+                        <div className="py-12 text-center text-sm text-gray-500">No products found</div>
+                    ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {data.data.map((product) => (
+                                <div key={product.id} className="p-3 bg-white border border-gray-200 rounded-xl shadow-sm space-y-3">
+                                    <div className="flex gap-3 items-center">
+                                        <img
+                                            src={product.image || 'https://via.placeholder.com/150'}
+                                            alt={product.name}
+                                            className="w-16 h-16 object-cover rounded-lg shrink-0 border border-gray-100"
+                                        />
+                                        <div className="flex-1 min-w-0">
+                                            <h4 className="font-semibold text-gray-900 text-sm truncate">{product.name}</h4>
+                                            <p className="text-xs text-gray-500 truncate mb-1">
+                                                {product.category?.name || "Uncategorized"}
+                                            </p>
+                                            <div className="flex items-center gap-2">
+                                                <Badge className={getStatusColor(product.status)}>
+                                                    {product.status.charAt(0).toUpperCase() + product.status.slice(1)}
+                                                </Badge>
+                                                <span className="font-bold text-sm text-blue-600">
+                                                    {formatCurrency(product.price)}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center justify-end gap-1 pt-2 border-t border-gray-100">
+                                        <Link to={`/products/${product.id}`} className="flex-1">
+                                            <Button variant="ghost" size="sm" className="w-full text-xs justify-center">
+                                                <Eye className="h-3.5 w-3.5 mr-1" />
+                                                View
+                                            </Button>
+                                        </Link>
+                                        <Link to={`/products/${product.id}/edit`} className="flex-1">
+                                            <Button variant="ghost" size="sm" className="w-full text-xs justify-center">
+                                                <Edit className="h-3.5 w-3.5 mr-1" />
+                                                Edit
+                                            </Button>
+                                        </Link>
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            onClick={() => handleDelete(product)}
+                                            className="flex-1 text-xs text-red-600 justify-center"
+                                        >
+                                            <Trash2 className="h-3.5 w-3.5 mr-1 text-red-500" />
+                                            Delete
+                                        </Button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                {/* Desktop View: Data Table */}
+                <div className="hidden md:block">
+                    <DataTable
+                        columns={columns}
+                        data={data?.data || []}
+                        loading={isLoading}
+                        emptyMessage="No products found"
+                    />
+                </div>
 
                 {data && (
                     <div className="mt-6">
@@ -223,15 +287,16 @@ const ProductsPage: React.FC = () => {
                 title="Delete Product"
             >
                 <div className="space-y-4">
-                    <p className="text-gray-600">
+                    <p className="text-sm text-gray-600">
                         Are you sure you want to delete "
-                        {deleteModal.product?.name}"? This action cannot be
+                        <span className="font-semibold text-gray-800">{deleteModal.product?.name}</span>"? This action cannot be
                         undone.
                     </p>
-                    <div className="flex justify-end space-x-3">
+                    <div className="flex flex-col-reverse sm:flex-row justify-end gap-2.5">
                         <Button
                             variant="outline"
                             onClick={() => setDeleteModal({ open: false })}
+                            className="w-full sm:w-auto"
                         >
                             Cancel
                         </Button>
@@ -239,6 +304,7 @@ const ProductsPage: React.FC = () => {
                             variant="danger"
                             onClick={confirmDelete}
                             loading={deleteProductMutation.isPending}
+                            className="w-full sm:w-auto"
                         >
                             Delete
                         </Button>
